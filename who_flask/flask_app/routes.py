@@ -1,6 +1,5 @@
 from flask_app import app
 from flask import render_template, redirect
-from flask_app.config import Config
 from sqlalchemy import func
 from flask_app.forms import SurveyForm
 from flask_app import db
