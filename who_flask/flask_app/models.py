@@ -1,4 +1,5 @@
 from flask_app import db
+from flask_app import app
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
 
