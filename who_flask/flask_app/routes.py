@@ -62,8 +62,8 @@ def result():
     da_data['time'] = db.session.query((func.avg(Responses.times))).one()[0]
     means_list = db.session.query(func.count(Responses.means1), Responses.means1).\
         group_by(Responses.means1).order_by(func.count(Responses.means1).desc()).all()
-    da_data['means_num'] = means_list[0][1]
-    da_data['means_name'] = means_list[0][0]
+    da_data['means_num'] = means_list[0][0]
+    da_data['means_name'] = means_list[0][1]
     da_data['happy'] = db.session.query(Responses).filter(Responses.desires == 'Да').count()
     popular_list = db.session.query(Responses.preference, func.count(Responses.preference)).\
         group_by(Responses.preference).order_by(func.count(Responses.preference).desc()).all()
