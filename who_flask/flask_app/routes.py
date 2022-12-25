@@ -45,28 +45,31 @@ def thanks():
 
 @app.route('/result')
 def result():
-    da_data = {}
-    age_stats = db.session.query(
+    try:
+        da_data = {}
+        age_stats = db.session.query(
             func.avg(RespondentData.age),
             func.min(RespondentData.age),
             func.max(RespondentData.age)).one()
-    da_data['age_mean'] = age_stats[0]
-    da_data['age_min'] = age_stats[1]
-    da_data['age_max'] = age_stats[2]
-    da_data['freq_max'] = db.session.query((func.max(RespondentData.frequency))).one()[0]
-    da_data['freq_min'] = db.session.query((func.min(RespondentData.frequency))).one()[0]
-    da_data['school'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'школа').count()
-    da_data['student'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'вуз').count()
-    da_data['work'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'работа').count()
-    da_data['pension'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'пенсионер').count()
-    da_data['time'] = db.session.query((func.avg(Responses.times))).one()[0]
-    means_list = db.session.query(func.count(Responses.means1), Responses.means1).\
-        group_by(Responses.means1).order_by(func.count(Responses.means1).desc()).all()
-    da_data['means_num'] = means_list[0][0]
-    da_data['means_name'] = means_list[0][1]
-    da_data['happy'] = db.session.query(Responses).filter(Responses.desires == 'Да').count()
-    popular_list = db.session.query(Responses.preference, func.count(Responses.preference)).\
-        group_by(Responses.preference).order_by(func.count(Responses.preference).desc()).all()
-    da_data['popular'] = popular_list[0][0]
-    da_data['persons'] = popular_list[0][1]
-    return render_template("tmp_opros_reesult.html", da_data=da_data)
+        da_data['age_mean'] = age_stats[0]
+        da_data['age_min'] = age_stats[1]
+        da_data['age_max'] = age_stats[2]
+        da_data['freq_max'] = db.session.query((func.max(RespondentData.frequency))).one()[0]
+        da_data['freq_min'] = db.session.query((func.min(RespondentData.frequency))).one()[0]
+        da_data['school'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'школа').count()
+        da_data['student'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'вуз').count()
+        da_data['work'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'работа').count()
+        da_data['pension'] = db.session.query(RespondentData).filter(RespondentData.occupation == 'пенсионер').count()
+        da_data['time'] = db.session.query((func.avg(Responses.times))).one()[0]
+        means_list = db.session.query(func.count(Responses.means1), Responses.means1). \
+            group_by(Responses.means1).order_by(func.count(Responses.means1).desc()).all()
+        da_data['means_num'] = means_list[0][0]
+        da_data['means_name'] = means_list[0][1]
+        da_data['happy'] = db.session.query(Responses).filter(Responses.desires == 'Да').count()
+        popular_list = db.session.query(Responses.preference, func.count(Responses.preference)). \
+            group_by(Responses.preference).order_by(func.count(Responses.preference).desc()).all()
+        da_data['popular'] = popular_list[0][0]
+        da_data['persons'] = popular_list[0][1]
+        return render_template("tmp_opros_reesult.html", da_data=da_data)
+    except:
+        return render_template("error.html")
